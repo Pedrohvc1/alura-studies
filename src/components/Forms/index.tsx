@@ -4,6 +4,10 @@ import style from "./forms.module.scss";
 
 //não aceita states como o function components
 class Forms extends React.Component {
+  state = {
+    tarefa: '',
+    tempo: '',
+  }
   render(): React.ReactNode {
     return (
       <form className={style.novaTarefa}>
@@ -12,6 +16,8 @@ class Forms extends React.Component {
           <input
             type="text"
             name="tarefa"
+            value={this.state.tarefa}
+            onChange={evt => this.setState({...this.state, tarefa: evt.target.value})}
             id="tarefa"
             placeholder="O que você quer estudar"
             required
@@ -23,6 +29,8 @@ class Forms extends React.Component {
             type="time"
             step="1"
             name="tempo"
+            value={this.state.tempo}
+            onChange={evt => this.setState({...this.state, tempo: evt.target.value})}
             id="tempo"
             min="00:00:00"
             max="01:30:00"
