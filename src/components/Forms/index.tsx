@@ -1,7 +1,6 @@
 import React from "react";
 import Botao from "../Button";
-import style from './forms.module.scss';
-
+import style from "./forms.module.scss";
 
 //não aceita states como o function components
 class Forms extends React.Component {
@@ -29,7 +28,9 @@ class Forms extends React.Component {
             max="01:30:00"
             required
           />
-          <Botao></Botao>
+          <Botao>
+            Adicionar
+          </Botao>
         </div>
       </form>
     );
