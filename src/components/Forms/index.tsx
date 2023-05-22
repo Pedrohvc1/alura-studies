@@ -1,23 +1,35 @@
 import React from "react";
 import Botao from "../Button";
 import style from "./forms.module.scss";
+import { ITarefa } from "../../types/tasks";
 
 //não aceita states como o function components
-class Forms extends React.Component {
+class Forms extends React.Component<{
+  setTarefas: React.Dispatch<React.SetStateAction<ITarefa[]>>;
+}> {
   state = {
-    tarefa: '',
-    tempo: '',
+    tarefa: "",
+    tempo: "00:00",
+  };
+
+  addTask(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    this.props.setTarefas((oldTasks) => [...oldTasks, this.state]);
   }
+
+  //bind associa a função a outro escopo passando o this como paremetro do bind e tbm dentro da funcao
   render(): React.ReactNode {
     return (
-      <form className={style.novaTarefa}>
+      <form className={style.novaTarefa} onSubmit={this.addTask.bind(this)}>
         <div className={style.inputContainer}>
           <label htmlFor="tarefa">Adicione um novo estudo</label>
           <input
             type="text"
             name="tarefa"
             value={this.state.tarefa}
-            onChange={evt => this.setState({...this.state, tarefa: evt.target.value})}
+            onChange={(evt) =>
+              this.setState({ ...this.state, tarefa: evt.target.value })
+            }
             id="tarefa"
             placeholder="O que você quer estudar"
             required
@@ -30,15 +42,15 @@ class Forms extends React.Component {
             step="1"
             name="tempo"
             value={this.state.tempo}
-            onChange={evt => this.setState({...this.state, tempo: evt.target.value})}
+            onChange={(evt) =>
+              this.setState({ ...this.state, tempo: evt.target.value })
+            }
             id="tempo"
             min="00:00:00"
             max="01:30:00"
             required
           />
-          <Botao>
-            Adicionar
-          </Botao>
+          <Botao>Adicionar</Botao>
         </div>
       </form>
     );
@@ -46,3 +58,5 @@ class Forms extends React.Component {
 }
 
 export default Forms;
+
+
