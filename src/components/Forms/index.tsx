@@ -2,6 +2,7 @@ import React from "react";
 import Botao from "../Button";
 import style from "./forms.module.scss";
 import { ITarefa } from "../../types/tasks";
+import { v4 as uuidv4 } from "uuid";
 
 //não aceita states como o function components
 class Forms extends React.Component<{
@@ -14,7 +15,17 @@ class Forms extends React.Component<{
 
   addTask(evt: React.FormEvent<HTMLFormElement>) {
     evt.preventDefault();
-    this.props.setTarefas((oldTasks) => [...oldTasks, this.state]);
+    //para criar ID aleatório, precisa instalar o uuid
+    this.props.setTarefas((oldTasks) => [
+      ...oldTasks,
+      { ...this.state, 
+        selecionado: false, 
+        completado: false, 
+        id: uuidv4()
+      },
+    ]);
+    //resetar o nome e tempo após escolhe-los
+    this.setState({ tarefa: "", tempo: "00:00" });
   }
 
   //bind associa a função a outro escopo passando o this como paremetro do bind e tbm dentro da funcao
@@ -58,5 +69,3 @@ class Forms extends React.Component<{
 }
 
 export default Forms;
-
-
