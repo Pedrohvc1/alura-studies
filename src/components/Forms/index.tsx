@@ -1,71 +1,58 @@
-import React from "react";
+import React, { useState } from "react";
 import Botao from "../Button";
 import style from "./forms.module.scss";
 import { ITarefa } from "../../types/tasks";
 import { v4 as uuidv4 } from "uuid";
 
-//não aceita states como o function components
-class Forms extends React.Component<{
+interface Props {
   setTarefas: React.Dispatch<React.SetStateAction<ITarefa[]>>;
-}> {
-  state = {
-    tarefa: "",
-    tempo: "00:00",
-  };
-
-  addTask(evt: React.FormEvent<HTMLFormElement>) {
-    evt.preventDefault();
-    //para criar ID aleatório, precisa instalar o uuid
-    this.props.setTarefas((oldTasks) => [
-      ...oldTasks,
-      { ...this.state, 
-        selecionado: false, 
-        completado: false, 
-        id: uuidv4()
-      },
-    ]);
-    //resetar o nome e tempo após escolhe-los
-    this.setState({ tarefa: "", tempo: "00:00" });
-  }
-
-  //bind associa a função a outro escopo passando o this como paremetro do bind e tbm dentro da funcao
-  render(): React.ReactNode {
-    return (
-      <form className={style.novaTarefa} onSubmit={this.addTask.bind(this)}>
-        <div className={style.inputContainer}>
-          <label htmlFor="tarefa">Adicione um novo estudo</label>
-          <input
-            type="text"
-            name="tarefa"
-            value={this.state.tarefa}
-            onChange={(evt) =>
-              this.setState({ ...this.state, tarefa: evt.target.value })
-            }
-            id="tarefa"
-            placeholder="O que você quer estudar"
-            required
-          />
-        </div>
-        <div className={style.inputContainer}>
-          <label htmlFor="tempo">Tempo</label>
-          <input
-            type="time"
-            step="1"
-            name="tempo"
-            value={this.state.tempo}
-            onChange={(evt) =>
-              this.setState({ ...this.state, tempo: evt.target.value })
-            }
-            id="tempo"
-            min="00:00:00"
-            max="01:30:00"
-            required
-          />
-          <Botao>Adicionar</Botao>
-        </div>
-      </form>
-    );
-  }
 }
 
+function Forms({ setTarefas }: Props) {
+  const [tarefa, setTarefa] = useState("");
+  const [tempo, setTempo] = useState("00:00");
+
+  function addTask(evt: React.FormEvent<HTMLFormElement>) {
+    evt.preventDefault();
+    //para criar ID aleatório, precisa instalar o uuid
+    setTarefas((oldTasks) => [
+      ...oldTasks,
+      { tarefa, tempo, selecionado: false, completado: false, id: uuidv4() },
+    ]);
+    //resetar o nome e tempo após escolhe-los
+    setTarefa("");
+    setTempo("00:00");
+  }
+  return (
+    <form className={style.novaTarefa} onSubmit={addTask}>
+      <div className={style.inputContainer}>
+        <label htmlFor="tarefa">Adicionar Atividade</label>
+        <input
+          type="text"
+          name="tarefa"
+          value={tarefa}
+          onChange={(evt) => setTarefa(evt.target.value)}
+          id="tarefa"
+          placeholder="adicione as atividades aqui"
+          required
+        />
+      </div>
+      <div className={style.inputContainer}>
+        <label htmlFor="tempo">Tempo</label>
+        <input
+          type="time"
+          step="1"
+          name="tempo"
+          value={tempo}
+          onChange={(evt) => setTempo(evt.target.value)}
+          id="tempo"
+          min="00:00:00"
+          max="01:30:00"
+          required
+        />
+        <Botao type="submit">Adicionar</Botao>
+      </div>
+    </form>
+  );
+}
 export default Forms;
